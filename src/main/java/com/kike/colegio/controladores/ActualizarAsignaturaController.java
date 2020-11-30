@@ -9,22 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kike.colegio.dao.AlumnoDAO;
-import com.kike.colegio.dao.impl.AlumnoDAOImpl;
-;
+import com.kike.colegio.dao.AsignaturaDAO;
+import com.kike.colegio.dao.impl.AsignaturaDAOImpl;
 
 /**
- * Servlet implementation class ActualizarAlumno
+ * Servlet implementation class ActualizarAsignaturaController
  */
-
-@WebServlet("/actualizaralumno")
-public class ActualizarAlumnoController extends HttpServlet {
+@WebServlet("/actualizarasignatura")
+public class ActualizarAsignaturaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ActualizarAlumnoController() {
+    public ActualizarAsignaturaController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,17 +42,16 @@ public class ActualizarAlumnoController extends HttpServlet {
 		String idOld = request.getParameter("idOld");
 		String idNew = request.getParameter("id");
 		String nombre = request.getParameter("nombre");
-		String idMunicipio = request.getParameter("municipios");
+		String curso = request.getParameter("curso");
 		
 
 
-		AlumnoDAO a = new AlumnoDAOImpl();
-		a.actualizarAlumno(idOld, idNew, nombre, idMunicipio);
+		AsignaturaDAO a = new AsignaturaDAOImpl();
+		a.actualizarAsignatura(idOld, idNew, nombre, curso);
 		
-		RequestDispatcher d = getServletContext().getRequestDispatcher("/WEB-INF/vistas/alumno/actualizarAlumnos.jsp");
+		RequestDispatcher d = getServletContext().getRequestDispatcher("/WEB-INF/vistas/asignatura/actualizarAsignaturas.jsp");
 		
 		d.forward(request, response);
-		
 	}
 
 }

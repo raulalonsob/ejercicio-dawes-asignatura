@@ -22,10 +22,10 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 		try {
 			Connection connection = DBUtils.DBConnection();
 			Statement st = connection.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM ALUMNOS");
+			ResultSet rs = st.executeQuery("SELECT * FROM ASIGNATURAS");
 
 			while (rs.next()) {
-				Asignatura a = new Asignatura(rs.getInt(1), rs.getString(2), "");
+				Asignatura a = new Asignatura(rs.getInt(1), rs.getString(2), rs.getInt(3));
 				listaAsignaturas.add(a);
 			}
 
@@ -38,10 +38,8 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 	}
 
 	@Override
-	public List<Asignatura> obtenerAsignaturasporIdyNombre(String id, String nombre) {
-		// String sql = "SELECT * FROM alumnos WHERE id LIKE ? AND nombre LIKE ?";
-		String sql = "SELECT a.id, a.nombre, m.nombre, m.id_municipio " + "FROM alumnos a, municipios m "
-				+ "WHERE  a.id_municipio = m.id_municipio " + "AND a.id LIKE ? AND a.nombre LIKE ?";
+	public List<Asignatura> obtenerAsignaturasporIdyNombreyCurso(String id, String nombre, String curso) {
+		String sql = "select * from asignaturas where id like ? and nombre like ? and curso like ?";
 
 		ResultSet asignaturaResultSet = null;
 		Connection connection = DBUtils.DBConnection();
@@ -52,13 +50,14 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 
 			ps.setString(1, "%" + id + "%");
 			ps.setString(2, "%" + nombre + "%");
+			ps.setString(3, "%" + curso + "%");
+
 
 			asignaturaResultSet = ps.executeQuery();
 
 			while (asignaturaResultSet.next()) {
 				Asignatura a = new Asignatura
-						(asignaturaResultSet.getInt(1), asignaturaResultSet.getString(2),
-						asignaturaResultSet.getString(3), asignaturaResultSet.getInt(4));
+						(asignaturaResultSet.getInt(1), asignaturaResultSet.getString(2), asignaturaResultSet.getInt(3));
 				listaAsignaturas.add(a);
 			}
 		} catch (SQLException e) {
@@ -69,8 +68,8 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 	}
 
 	@Override
-	public Integer insertarAsignaturas(String id, String nombre, String idMunicipio) {
-		String sql = "INSERT INTO alumnos (id, nombre, id_municipio) VALUES (?, ?, ?)";
+	public Integer insertarAsignaturas(String id, String nombre, String curso) {
+		String sql = "INSERT INTO asignaturas (id, nombre, curso) VALUES (?, ?, ?)";
 		Connection connection = DBUtils.DBConnection();
 		PreparedStatement ps = null;
 		Integer resultado = null;
@@ -80,7 +79,7 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 
 			ps.setString(1, id);
 			ps.setString(2, nombre);
-			ps.setString(3, idMunicipio);
+			ps.setString(3, curso);
 
 			resultado = ps.executeUpdate();
 
@@ -102,8 +101,8 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 	}
 
 	@Override
-	public Integer actualizarAsignaturas(String idOld, String idNew, String nombre, String idMunicipio) {
-		String sql = "UPDATE alumnos SET id= ?, nombre = ? ,id_municipio = ? WHERE id = ?";
+	public Integer actualizarAsignatura(String idOld, String idNew, String nombre, String curso) {
+		String sql = "UPDATE asignaturas SET id= ?, nombre = ? , curso = ? WHERE id = ?";
 
 		Connection connection = DBUtils.DBConnection();
 		PreparedStatement ps = null;
@@ -114,7 +113,7 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 
 			ps.setString(1, idNew);
 			ps.setString(2, nombre);
-			ps.setString(3, idMunicipio);
+			ps.setString(3, curso);
 			ps.setString(4, idOld);
 
 			resultado = ps.executeUpdate();
@@ -138,7 +137,7 @@ public class AsignaturaDAOImpl implements AsignaturaDAO{
 
 	@Override
 	public Integer borrarAsignatura(String id) {
-		String sql = "DELETE FROM alumnos WHERE id = ?";
+		String sql = "DELETE FROM asignaturas WHERE id = ?";
 
 		Connection connection = DBUtils.DBConnection();
 		PreparedStatement ps = null;

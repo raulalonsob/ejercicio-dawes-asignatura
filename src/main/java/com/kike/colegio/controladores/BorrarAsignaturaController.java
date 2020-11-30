@@ -9,22 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kike.colegio.dao.AlumnoDAO;
-import com.kike.colegio.dao.impl.AlumnoDAOImpl;
-;
+import com.kike.colegio.dao.AsignaturaDAO;
+
+import com.kike.colegio.dao.impl.AsignaturaDAOImpl;
 
 /**
- * Servlet implementation class ActualizarAlumno
+ * Servlet implementation class BorrarAsignaturaController
  */
-
-@WebServlet("/actualizaralumno")
-public class ActualizarAlumnoController extends HttpServlet {
+@WebServlet("/borrarasignatura")
+public class BorrarAsignaturaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ActualizarAlumnoController() {
+    public BorrarAsignaturaController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,20 +40,14 @@ public class ActualizarAlumnoController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idOld = request.getParameter("idOld");
-		String idNew = request.getParameter("id");
-		String nombre = request.getParameter("nombre");
-		String idMunicipio = request.getParameter("municipios");
+		String id = request.getParameter("id");
 		
-
-
-		AlumnoDAO a = new AlumnoDAOImpl();
-		a.actualizarAlumno(idOld, idNew, nombre, idMunicipio);
+		AsignaturaDAO a = new AsignaturaDAOImpl();
 		
-		RequestDispatcher d = getServletContext().getRequestDispatcher("/WEB-INF/vistas/alumno/actualizarAlumnos.jsp");
+		a.borrarAsignatura(id);
 		
+		RequestDispatcher d = getServletContext().getRequestDispatcher("/WEB-INF/vistas/asignatura/borrarAsignaturas.jsp");
 		d.forward(request, response);
-		
 	}
 
 }
